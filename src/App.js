@@ -2,6 +2,8 @@ import React from 'react';
 import Titles from "./components/Titles";
 import Form from "./components/Form";
 import Weather from "./components/Weather";
+import Yelp from "./components/Yelp";
+import logo from './components/img/tree.png';
 
 class App extends React.Component {
   state = {
@@ -19,7 +21,7 @@ class App extends React.Component {
     const api_call = await fetch(`http://10.185.197.29:3000/weather?cityName=${city}&time=${time}`);
 
     const data = await api_call.json();   
-    if(city) {
+    if(city && time) {
       // eslint-disable-next-line
       if(data.cod == 404) {
         this.setState({
@@ -44,15 +46,32 @@ class App extends React.Component {
         city: undefined,
         humidity: undefined,
         description: undefined,
-        error: "Please enter a city and country name."
+        error: "Please enter a city name and current/forecast"
       });
     }
   }
+
+  getYelp = async (e) => {
+    e.preventDefault();
+    const location = e.target.elements.location.value;
+    const something = e.target.elements.something.value;
+    const yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`);
+
+    const data = await yelp_api_call.json();
+  }
+
   
   render() {
     return (
-      <div>
-         <Titles/>
+
+
+      <div className="form-container">
+      <div className="title-container">
+      
+        <Titles/>
+        <img src={logo} alt="Logo"/>
+        </div>
+         
          <Form getWeather={this.getWeather}/>
             <Weather 
               temperature={this.state.temperature}
@@ -61,7 +80,9 @@ class App extends React.Component {
               description={this.state.description}
               error={this.state.error}
             />
-      </div>
+          <Yelp getYelp={this.getYelp}/>
+        </div>
+
     );
   }
 }
