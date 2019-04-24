@@ -2,7 +2,6 @@ import React from 'react';
 import Titles from "./components/Titles";
 import Form from "./components/Form";
 import Weather from "./components/Weather";
-import Yelp from "./components/Yelp";
 import logo from './components/img/tree.png';
 
 class App extends React.Component {
@@ -11,6 +10,14 @@ class App extends React.Component {
     city: undefined,
     humidity: undefined,
     description: undefined,
+    name: undefined,
+    url: undefined,
+    display_phone: undefined,
+    rating: undefined,
+    price: undefined,
+    location: undefined,
+    photos: undefined,
+    hours: undefined,
     error: undefined
   }
 
@@ -53,11 +60,52 @@ class App extends React.Component {
 
   getYelp = async (e) => {
     e.preventDefault();
-    const location = e.target.elements.location.value;
+    const location = e.target.elements.city.value;
     const something = e.target.elements.something.value;
     const yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`);
 
     const data = await yelp_api_call.json();
+
+    if(location && something) {
+      // eslint-disable-next-line
+      if(data.cod == 404) {
+        this.setState({
+          name: undefined,
+          url: undefined,
+          display_phone: undefined,
+          rating: undefined,
+          price: undefined,
+          location: undefined,
+          photos: undefined,
+          hours: undefined,
+          error: "Input doesn't match any known location!"
+      });
+    } else {
+      this.setState({
+        name: undefined,
+        url: undefined,
+        display_phone: undefined,
+        rating: undefined,
+        price: undefined,
+        location: undefined,
+        photos: undefined,
+        hours: undefined,
+        error: ""
+      });
+    } 
+  } else {
+      this.setState({
+        name: undefined,
+        url: undefined,
+        display_phone: undefined,
+        rating: undefined,
+        price: undefined,
+        location: undefined,
+        photos: undefined,
+        hours: undefined,
+        error: "Please enter a city name, current or forecast, and something to search."
+      });
+    }
   }
 
   
@@ -80,7 +128,6 @@ class App extends React.Component {
               description={this.state.description}
               error={this.state.error}
             />
-          <Yelp getYelp={this.getYelp}/>
         </div>
 
     );
