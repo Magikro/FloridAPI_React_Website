@@ -18,7 +18,7 @@ class App extends React.Component {
     e.preventDefault();
     const city = e.target.elements.city.value;
     const time = e.target.elements.time.value;
-    const api_call = await fetch(`http://10.185.197.29:3000/weather?cityName=${city}&time=${time}`);
+    const api_call = await fetch(`http://10.185.186.22:3000/weather?cityName=${city}&time=${time}`, {mode:'cors'});
 
     const data = await api_call.json();   
     if(city && time) {
@@ -69,7 +69,7 @@ class App extends React.Component {
       <div className="title-container">
       
         <Titles/>
-        <img src={logo} alt="Logo"/>
+        <img src={logo} alt="Logo" width="500px" height="500px"/>
         </div>
          
          <Form getWeather={this.getWeather}/>

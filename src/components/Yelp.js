@@ -6,7 +6,7 @@ const Yelp = (props) => (
         <input type="text" name="something" placeholder="Search Something"/>
         <button>Search</button>
     </form>
-    );
+);
 
 
 export default Yelp;
