@@ -3,18 +3,20 @@ import Titles from "./components/Titles";
 import Form from "./components/Form";
 import Weather from "./components/Weather";
 import logo from './components/img/tree.png';
+import YelpInfo from './components/YelpInfo';
 
 class App extends React.Component {
   state = {
-    temperature: undefined,
+    temperatureF: undefined,
+    temperatureC: undefined,
     city: undefined,
     humidity: undefined,
     description: undefined,
     name: undefined,
+    yelpcity: undefined,
     url: undefined,
     display_phone: undefined,
     rating: undefined,
-    price: undefined,
     location: undefined,
     photos: undefined,
     hours: undefined,
@@ -24,72 +26,80 @@ class App extends React.Component {
   getWeather = async (e) => {
     e.preventDefault();
     const city = e.target.elements.city.value;
-    const time = e.target.elements.time.value;
-    const api_call = await fetch(`http://10.185.186.22:3000/weather?cityName=${city}&time=${time}`, {mode:'cors'});
+    const location = e.target.elements.city.value;
+    const something = e.target.elements.something.value;
 
-    const data = await api_call.json();   
-    if(city && time) {
+    var api_call;
+    var yelp_api_call;
+
+    Promise.all([
+    api_call = await fetch(`http://10.185.197.29:3000/weather?cityName=${city}&time=forecast`, {mode:'cors'}),
+    yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`, {mode:'cors'})]);
+    
+
+
+    const data = await api_call.json();
+    if(city) {
+      
       // eslint-disable-next-line
       if(data.cod == 404) {
         this.setState({
-          temperature: undefined,
+          temperatureF: undefined,
+          temperatureC: undefined,
           city: undefined,
           humidity: undefined,
           description: undefined,
           error: "Input doesn't match any known location!"
       });
     } else {
+      var celsius = parseFloat((data.list[0].main.temp) - 273.15).toFixed(2);
+      var fahrenheit = ((celsius * 9/5) + 32).toFixed(2);
       this.setState({
-        temperature: data.main.temp,
-        city: data.name,
-        humidity: data.main.humidity,
-        description: data.weather[0].description,
+        temperatureF: fahrenheit,
+        temperatureC: celsius,
+        city: data.list[0].name,
+        humidity: data.list[0].main.humidity,
+        description: data.list[0].weather[0].description,
         error: ""
       });
     } 
   } else {
       this.setState({
-        temperature: undefined,
+        temperatureF: undefined,
+        temperatureC: undefined,
         city: undefined,
         humidity: undefined,
         description: undefined,
-        error: "Please enter a city name and current/forecast"
+        error: "Please enter a city name."
       });
     }
-  }
 
-  getYelp = async (e) => {
-    e.preventDefault();
-    const location = e.target.elements.city.value;
-    const something = e.target.elements.something.value;
-    const yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`);
-
-    const data = await yelp_api_call.json();
-
+    
+    const data1 = await yelp_api_call.json();
     if(location && something) {
       // eslint-disable-next-line
-      if(data.cod == 404) {
+      if(data1.cod == 404) {
         this.setState({
           name: undefined,
           url: undefined,
           display_phone: undefined,
           rating: undefined,
-          price: undefined,
           location: undefined,
+          yelpcity:undefined,
           photos: undefined,
           hours: undefined,
           error: "Input doesn't match any known location!"
       });
     } else {
       this.setState({
-        name: undefined,
-        url: undefined,
-        display_phone: undefined,
-        rating: undefined,
-        price: undefined,
-        location: undefined,
-        photos: undefined,
-        hours: undefined,
+        name: data1.businesses[0].name,
+        url: data1.businesses[0].url,
+        display_phone: data1.businesses[0].display_phone,
+        rating: data1.businesses[0].rating,
+        location: data1.businesses[0].location.address1,
+        yelpcity: data1.businesses[0].location.city,
+        photos: data1.businesses[0].image_url,
+        hours: data1.businesses[0].is_closed,
         error: ""
       });
     } 
@@ -99,11 +109,11 @@ class App extends React.Component {
         url: undefined,
         display_phone: undefined,
         rating: undefined,
-        price: undefined,
         location: undefined,
+        yelpcity:undefined,
         photos: undefined,
         hours: undefined,
-        error: "Please enter a city name, current or forecast, and something to search."
+        error: "Please enter something to search."
       });
     }
   }
@@ -117,16 +127,27 @@ class App extends React.Component {
       <div className="title-container">
       
         <Titles/>
-        <img src={logo} alt="Logo" width="500px" height="500px"/>
-        </div>
+        <img src={logo} alt="Logo" className="logoImg"/>
+      </div>
          
-         <Form getWeather={this.getWeather}/>
+         <Form getWeather={this.getWeather} getYelp={this.getYelp}/>
             <Weather 
-              temperature={this.state.temperature}
+              temperatureF={this.state.temperatureF}
+              temperatureC={this.state.temperatureC}
               city={this.state.city}
               humidity={this.state.humidity}
               description={this.state.description}
               error={this.state.error}
+            />
+            <YelpInfo 
+            name={this.state.name}
+            url={this.state.url}
+            display_phone={this.state.display_phone}
+            rating={this.state.rating}
+            location={this.state.location}
+            yelpcity={this.state.yelpcity}
+            photos={this.state.photos}
+            hours={this.state.hours}
             />
         </div>
 
