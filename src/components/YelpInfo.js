@@ -41,7 +41,7 @@ const YelpInfo = (props) => (
             {
                 props.photos && 
                 <p className="weather__key">Photos:
-                    <img className="weather__value" src={props.photos} alt="image" height="250px" width="250px">{}</img>
+                    <img className="weather__value" src={props.photos} alt="" height="250px" width="250px">{}</img>
                 </p>
             }
             {

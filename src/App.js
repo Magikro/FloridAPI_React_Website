@@ -4,11 +4,18 @@ import Form from "./components/Form";
 import Weather from "./components/Weather";
 import logo from './components/img/tree.png';
 import YelpInfo from './components/YelpInfo';
+import YelpBusiness from './components/YelpBusiness';
+
+var api_call;
+var yelp_api_call;
+var celsius;
+var fahrenheit;
 
 class App extends React.Component {
   state = {
     temperatureF: undefined,
     temperatureC: undefined,
+    businesses: undefined,
     city: undefined,
     humidity: undefined,
     description: undefined,
@@ -29,9 +36,6 @@ class App extends React.Component {
     const location = e.target.elements.city.value;
     const something = e.target.elements.something.value;
 
-    var api_call;
-    var yelp_api_call;
-
     Promise.all([
     api_call = await fetch(`http://10.185.197.29:3000/weather?cityName=${city}&time=forecast`, {mode:'cors'}),
     yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`, {mode:'cors'})]);
@@ -40,7 +44,7 @@ class App extends React.Component {
 
     const data = await api_call.json();
     if(city) {
-      
+
       // eslint-disable-next-line
       if(data.cod == 404) {
         this.setState({
@@ -52,16 +56,18 @@ class App extends React.Component {
           error: "Input doesn't match any known location!"
       });
     } else {
-      var celsius = parseFloat((data.list[0].main.temp) - 273.15).toFixed(2);
-      var fahrenheit = ((celsius * 9/5) + 32).toFixed(2);
-      this.setState({
-        temperatureF: fahrenheit,
-        temperatureC: celsius,
-        city: data.list[0].name,
-        humidity: data.list[0].main.humidity,
-        description: data.list[0].weather[0].description,
-        error: ""
-      });
+
+        celsius = parseFloat((data.list[0].main.temp) - 273.15).toFixed(2);
+        fahrenheit = ((celsius * 9/5) + 32).toFixed(2);
+        this.setState({
+          temperatureF: fahrenheit,
+          temperatureC: celsius,
+          city: data.list[0].name,
+          humidity: data.list[0].main.humidity,
+          description: data.list[0].weather[0].description,
+          error: ""
+        });
+
     } 
   } else {
       this.setState({
@@ -100,8 +106,10 @@ class App extends React.Component {
         yelpcity: data1.businesses[0].location.city,
         photos: data1.businesses[0].image_url,
         hours: data1.businesses[0].is_closed,
+        businesses: data1,
         error: ""
       });
+      console.log(this.state.businesses);
     } 
   } else {
       this.setState({
@@ -130,7 +138,7 @@ class App extends React.Component {
         <img src={logo} alt="Logo" className="logoImg"/>
       </div>
          
-         <Form getWeather={this.getWeather} getYelp={this.getYelp}/>
+         <Form getWeather={this.getWeather}/>
             <Weather 
               temperatureF={this.state.temperatureF}
               temperatureC={this.state.temperatureC}
@@ -149,6 +157,7 @@ class App extends React.Component {
             photos={this.state.photos}
             hours={this.state.hours}
             />
+            <YelpBusiness businesses={this.state.businesses}/>
         </div>
 
     );
