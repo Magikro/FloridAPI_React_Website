@@ -3,7 +3,6 @@ import Titles from "./components/Titles";
 import Form from "./components/Form";
 import Weather from "./components/Weather";
 import logo from './components/img/tree.png';
-import YelpInfo from './components/YelpInfo';
 
 var api_call;
 var yelp_api_call;
@@ -15,6 +14,7 @@ class App extends React.Component {
     temperatureF: undefined,
     temperatureC: undefined,
     businesses: [],
+    weathers: [],
     city: undefined,
     humidity: undefined,
     description: undefined,
@@ -41,8 +41,9 @@ class App extends React.Component {
     yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`, {mode:'cors'})]);
     
 
-
+    
     const data = await api_call.json();
+    console.log(data);
     if(city) {
 
       // eslint-disable-next-line
@@ -65,6 +66,7 @@ class App extends React.Component {
           city: data.list[0].name,
           humidity: data.list[0].main.humidity,
           description: data.list[0].weather[0].description,
+          weathers: data.list,
           error: ""
         });
 
@@ -147,28 +149,28 @@ class App extends React.Component {
               description={this.state.description}
               error={this.state.error}
             />
-            <YelpInfo 
-            name={this.state.name}
-            url={this.state.url}
-            display_phone={this.state.display_phone}
-            rating={this.state.rating}
-            location={this.state.location}
-            yelpcity={this.state.yelpcity}
-            photos={this.state.photos}
-            hours={this.state.hours}
-            />
-            <div className="test">
+            <div className="weatherStuff">
+              {this.state.weathers.map((weatherObj) => {
+                return (
+                  <div className="weSubDiv">
+                  <p>Temperature: {parseFloat((weatherObj.main.temp) - 273.15).toFixed(2)} / {((((weatherObj.main.temp) - 273.15) * 9/5) + 32).toFixed(2)}</p>
+                  <p>Humidity: {weatherObj.main.humidity}</p>
+                  <p>Conditions: {weatherObj.weather[0].description}</p>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="yelpStuff">
             {this.state.businesses.map((businessObj) => {
               return (
-                <div>
-                  <p>Name: {businessObj.name}</p>
-                  <p>URL: {businessObj.url}</p>
+                <div className="subDiv">
+                  <p><img src={businessObj.image_url} alt="" height="250px" width="250px"></img></p>
+                  <p >Name: {businessObj.name}</p>
+                  <p>URL: <a  href={businessObj.url}>{" "+businessObj.url}</a></p>
                   <p>Phone Number: {businessObj.display_phone}</p>
                   <p>Rating: {businessObj.rating}</p>
                   <p>Address: <a  href={"https://www.google.com/maps/place/"+(businessObj.location.address1).replace(/ /g, "+")+""}>{" "+businessObj.location.address1}</a></p>
                   <p>City: {businessObj.location.city}</p>
-                  <p>Photo: <img src={businessObj.image_url} alt="" height="250px" width="250px"></img></p>
-                  <p>Hours: {businessObj.is_closed}</p>
                 </div>
               )
             })}

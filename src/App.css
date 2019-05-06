@@ -47,8 +47,7 @@
 }
 
 .yelp_info {
-    padding-top:10px;
-    border-bottom:3px solid rgb(45, 53, 61);
+
 }
 
 .formBoy {
@@ -60,4 +59,13 @@
 .logoImg {
     max-width: 50%;
     height:auto;
+}
+
+.yelpStuff {
+    color:white;
+}
+
+.subDiv {
+    padding-top:10px;
+    border-bottom:3px solid rgb(44, 132, 219);
 }
