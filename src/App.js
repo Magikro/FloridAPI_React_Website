@@ -4,7 +4,6 @@ import Form from "./components/Form";
 import Weather from "./components/Weather";
 import logo from './components/img/tree.png';
 import YelpInfo from './components/YelpInfo';
-import YelpBusiness from './components/YelpBusiness';
 
 var api_call;
 var yelp_api_call;
@@ -15,7 +14,7 @@ class App extends React.Component {
   state = {
     temperatureF: undefined,
     temperatureC: undefined,
-    businesses: undefined,
+    businesses: [],
     city: undefined,
     humidity: undefined,
     description: undefined,
@@ -29,6 +28,7 @@ class App extends React.Component {
     hours: undefined,
     error: undefined
   }
+  
 
   getWeather = async (e) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ class App extends React.Component {
         yelpcity: data1.businesses[0].location.city,
         photos: data1.businesses[0].image_url,
         hours: data1.businesses[0].is_closed,
-        businesses: data1,
+        businesses: data1.businesses,
         error: ""
       });
       console.log(this.state.businesses);
@@ -157,7 +157,22 @@ class App extends React.Component {
             photos={this.state.photos}
             hours={this.state.hours}
             />
-            <YelpBusiness businesses={this.state.businesses}/>
+            <div className="test">
+            {this.state.businesses.map((businessObj) => {
+              return (
+                <div>
+                  <p>Name: {businessObj.name}</p>
+                  <p>URL: {businessObj.url}</p>
+                  <p>Phone Number: {businessObj.display_phone}</p>
+                  <p>Rating: {businessObj.rating}</p>
+                  <p>Address: <a  href={"https://www.google.com/maps/place/"+(businessObj.location.address1).replace(/ /g, "+")+""}>{" "+businessObj.location.address1}</a></p>
+                  <p>City: {businessObj.location.city}</p>
+                  <p>Photo: <img src={businessObj.image_url} alt="" height="250px" width="250px"></img></p>
+                  <p>Hours: {businessObj.is_closed}</p>
+                </div>
+              )
+            })}
+            </div>
         </div>
 
     );
