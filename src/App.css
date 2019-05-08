@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab:400,700');
 @import url('https://fonts.googleapis.com/css?family=Cafe+Retro');
-.wrapper {
-    
-    background: linear-gradient(to right, #690fbd,#ea03ff);
-    height: 100vh;
-    display: flex;
-    justify-content:center;
-    align-items:center;
-    color:#000000;
-    font-family: 'Roboto Slab', serif;
-}
 
 .title-container {
     font-family:'Cafe Retro', 'sans-serif';
@@ -34,20 +24,9 @@
     width:100%;
 }
 
-.weather__key {
-    padding-left:10px;
-    padding-top:10px;
-    color:rgb(255, 255, 255);
-    
-}
-
 .weather_info {
-    border-top:3px solid rgb(21, 122, 216);
-    border-bottom:3px solid rgb(21, 122, 216);
-}
-
-.yelp_info {
-
+    text-align:center;
+    font-size:30px;
 }
 
 .formBoy {
@@ -61,11 +40,14 @@
     height:auto;
 }
 
-.yelpStuff {
+.yelpers {
+    border-bottom:3px groove rgb(70, 108, 143);
     color:white;
+    padding-bottom:10px;
+    height:100%;
+    
 }
 
-.subDiv {
+.yelpStuff {
     padding-top:10px;
-    border-bottom:3px solid rgb(44, 132, 219);
 }

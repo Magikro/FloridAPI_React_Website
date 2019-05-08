@@ -2,6 +2,13 @@ import React from "react";
 
 const Weather = (props) => (
         <div className="weather_info">
+            <div className="alert alert-info" role="alert">
+            {
+                props.icon && 
+                <p className="weather__key">
+                    <img src={props.icon} alt=""></img>
+                </p>
+            }
             {
                 props.city &&
                 <p className="weather__key">Location: 
@@ -9,27 +16,19 @@ const Weather = (props) => (
                 </p>
             }         
             {
-                props.temperatureF && props.temperatureC &&
-                <p className="weather__key">Temperature: 
-                    <span className="weather__value">{" "+props.temperatureF}°F/{" "+props.temperatureC}°C</span>
-                </p>
-            }
-            {
-                props.humidity && 
-                <p className="weather__key">Humidity: 
-                    <span className="weather__value">{" "+props.humidity}</span>
-                </p>
-            }
-            {
-                props.description && 
-                <p className="weather__key">Conditions: 
-                    <span className="weather__value">{" "+props.description}</span>
+                props.temperatureF && props.temperatureC && props.humidity && 
+                <p className="weather__key"> 
+                    <span className="weather__value">{" "+props.temperatureF}°F/{" "+props.temperatureC}°C, </span>
+                    <span className="weather__value">{"Humidity: "+props.humidity+", "}</span>
+                    <span className="weather__value">{"Conditions: "+props.description+" "}</span>
                 </p>
             }
             {
                 props.error && <p className="weather__error">{" "+props.error}</p>
             }
         </div>
+            </div>
+
     );
 
 
