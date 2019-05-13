@@ -130,6 +130,11 @@ class App extends React.Component {
               <div className="yelpStuff">
                 <div className="container-fluid">
                   {this.state.businesses.map((businessObj) => {
+                    if(businessObj.location.address1 == null) {
+
+                      businessObj.location.address1 = "none found";
+
+                    }
                     return (
                     <ul className="yelpers">
                     <div className="media">
