@@ -2,7 +2,7 @@ import React from "react";
 
 const Weather = (props) => (
         <div className="weather_info">
-            <div className="alert alert-info" role="alert">
+
             {
                 props.icon && 
                 <p className="weather__key">
@@ -27,7 +27,7 @@ const Weather = (props) => (
                 props.error && <p className="weather__error">{" "+props.error}</p>
             }
         </div>
-            </div>
+
 
     );
 

@@ -112,9 +112,10 @@ class App extends React.Component {
       <div className="ridiculous">
       <div className="title-container">
       
-        <Titles/>
+        
         <img src={logo} alt="Logo" className="logoImg"/>
-      </div>
+        <Titles/>
+        </div>
          
          <Form getWeather={this.getWeather}/>
             <Weather 
@@ -126,26 +127,29 @@ class App extends React.Component {
                 icon={this.state.icon}
                 error={this.state.error}
               />  
-          <div className="yelpStuff">
-            <div className="container-fluid">
-              {this.state.businesses.map((businessObj) => {
-                return (
-                <ul className="yelpers">
-                <div className="media">
-                  <img src={businessObj.image_url} className="align-self-center mr-3" alt="..." height="270px" width="270px"></img>
-                  <div className="media-body">
-                    <h1 className="mt-0"><a  href={businessObj.url}>{businessObj.name}</a></h1>
-                    <h3>Phone Number: {businessObj.display_phone}</h3>
-                    <h3>Rating: {businessObj.rating}</h3>
-                    <h3>Address: <a  href={"https://www.google.com/maps/place/"+(businessObj.location.address1).replace(/ /g, "+")+""}>{" "+businessObj.location.address1}</a></h3>
-                    <h3>City: {businessObj.location.city}</h3>
-                  </div>
+              <div className="yelpStuff">
+                <div className="container-fluid">
+                  {this.state.businesses.map((businessObj) => {
+                    return (
+                    <ul className="yelpers">
+                    <div className="media">
+                      <img src={businessObj.image_url} className="align-self-center mr-3" alt="..." height="270px" width="270px"></img>
+                      <div className="media-body">
+                        <h1 className="mt-0"><a  href={businessObj.url}>{businessObj.name}</a></h1>
+                        <h3>Phone Number: {businessObj.display_phone}</h3>
+                        <h3>Rating: {businessObj.rating}</h3>
+                        <h3>Address: <a  href={"https://www.google.com/maps/place/"+(businessObj.location.address1).replace(/ /g, "+")+""}>{" "+businessObj.location.address1}</a></h3>
+                        <h3>City: {businessObj.location.city}</h3>
+                      </div>
+                    </div>
+                    </ul>
+                    )
+                  })}
                 </div>
-                </ul>
-                )
-              })}
+              </div>
             </div>
-          </div>
+          <div className="footer">
+          <p></p>
         </div>
       </div>
 
