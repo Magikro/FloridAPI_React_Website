@@ -29,18 +29,20 @@ class App extends React.Component {
     const city = e.target.elements.city.value;
     const location = e.target.elements.city.value;
     const something = e.target.elements.something.value;
+    //Getting data from form.
 
     Promise.all([
     api_call = await fetch(`http://10.185.197.29:3000/weather?cityName=${city}&time=current`, {mode:'cors'}),
     yelp_api_call = await fetch(`http://10.185.197.29:3000/yelp?term=${something}&location=${location}`, {mode:'cors'})]);
     
+    //Fetching data from both at the same time. Had an issue getting the button to do both.
 
     
-    const data = await api_call.json();
+    const data = await api_call.json(); //Setting weather data to a const.
     console.log(data);
-    if(city) {
+    if(city) { //If they have entered something into city
       // eslint-disable-next-line
-      if(data.cod == 404 || data.main == undefined) {
+      if(data.cod == 404 || data.main == undefined) { //If the data 404's
         this.setState({
           temperatureF: undefined,
           temperatureC: undefined,
@@ -50,7 +52,7 @@ class App extends React.Component {
           icon: undefined,
           error: "Input doesn't match any known weather location!"
       });
-    } else {
+    } else {  //If things works
 
         celsius = parseFloat((data.main.temp) - 273.15).toFixed(2);
         fahrenheit = ((celsius * 9/5) + 32).toFixed(2);
@@ -66,7 +68,7 @@ class App extends React.Component {
         });
         console.log(this.state.icon);
     } 
-  } else {
+  } else {  //If they didn't enter anything into city.
       this.setState({
         temperatureF: undefined,
         temperatureC: undefined,
@@ -79,15 +81,15 @@ class App extends React.Component {
     }
 
     
-    const data1 = await yelp_api_call.json();
-    if(location && something) {
+    const data1 = await yelp_api_call.json();  //Setting Yelp data to a const.
+    if(location && something) { //If they enter a location and something to do.
       // eslint-disable-next-line
-      if(data1.cod == 404) {
+      if(data1.cod == 404) { //If it 404's
         this.setState({
 
           error2: "Input doesn't match any known location!"
       });
-    } else {
+    } else { //If it works.
       this.setState({
 
         businesses: data1.businesses,
@@ -95,7 +97,7 @@ class App extends React.Component {
       });
       console.log(this.state.businesses);
     } 
-  } else {
+  } else {  //If they don't enter something & location.
       this.setState({
 
         error2: "Please enter something to search."
@@ -104,7 +106,7 @@ class App extends React.Component {
   }
 
   
-  render() {
+  render() { // Rendering the page!
     return (
 
 
@@ -118,7 +120,7 @@ class App extends React.Component {
         </div>
          
          <Form getWeather={this.getWeather}/>
-            <Weather 
+            <Weather //Sending data to Weather.js
                 temperatureF={this.state.temperatureF}
                 temperatureC={this.state.temperatureC}
                 city={this.state.city}
@@ -129,7 +131,7 @@ class App extends React.Component {
               />  
               <div className="yelpStuff">
                 <div className="container-fluid">
-                  {this.state.businesses.map((businessObj) => {
+                  {this.state.businesses.map((businessObj) => {  //Using map function to get every result from the JSON.
                     if(businessObj.location.address1 == null) {
 
                       businessObj.location.address1 = "none found";
@@ -153,13 +155,13 @@ class App extends React.Component {
                 </div>
               </div>
             </div>
-          <div className="footer">
+          <div className="footer"> 
           <p></p>
         </div>
       </div>
 
     );
-  }
+  }//footer to fix a weird graphical error
 }
 
 export default App;

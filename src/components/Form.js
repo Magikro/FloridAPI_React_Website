@@ -1,6 +1,6 @@
 import React from "react";
 
-const Form = (props) => (
+const Form = (props) => ( //The Form!
 
 
 <form onSubmit={props.getWeather} className="formBoy">
